@@ -8,7 +8,7 @@
 #   mod 'puppetlabs/rabbitmq'
 #   mod 'thomasvandoren/redis'
 #
-class profile::monitoring::server::sensu (
+class profile::monitoring::sensu::server (
   $checks                    = {},
   $handlers                  = {},
   $plugins                   = {},
@@ -24,7 +24,7 @@ class profile::monitoring::server::sensu (
   Service['redis-6379'] -> Service['sensu-api'] -> Service['sensu-server']
 
   include profile::base
-  include profile::monitoring::agent::sensu
+  include profile::monitoring::sensu::agent
 
   if $manage_redis {
     include profile::database::redis
