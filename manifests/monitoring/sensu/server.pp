@@ -19,19 +19,19 @@ class profile::monitoring::sensu::server (
   $manage_redis              = true,
 ) {
 
-  # TODO (spredzy): Find a nicer way to deal with dependencies
-  Service['rabbitmq-server'] -> Class['sensu::package']
-  Service['redis-6379'] -> Service['sensu-api'] -> Service['sensu-server']
-
   include profile::base
   include profile::monitoring::sensu::agent
 
   if $manage_redis {
     include profile::database::redis
+    # TODO (spredzy): Find a nicer way to deal with dependencies
+    Service['redis-6379'] -> Service['sensu-api'] -> Service['sensu-server']
   }
 
   if $manage_rabbitmq {
     include profile::messaging::rabbitmq
+    # TODO (spredzy): Find a nicer way to deal with dependencies
+    Service['rabbitmq-server'] -> Class['sensu::package']
   }
 
   if $proxy_dashboard {
